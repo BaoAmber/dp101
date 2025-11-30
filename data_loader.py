@@ -5,23 +5,23 @@ import os
 
 def get_data_loaders(batch_size=64):
     """
-    加载 MNIST 数据集
+    Load MNIST dataset
     
     Args:
-        batch_size: 批次大小
+        batch_size: Batch size
     
     Returns:
-        train_loader: 训练数据加载器
-        test_loader: 测试数据加载器
-        test_dataset: 测试数据集（用于获取文件路径）
+        train_loader: Training data loader
+        test_loader: Test data loader
+        test_dataset: Test dataset (for getting file paths)
     """
-    # 数据预处理：转换为张量并归一化
+    # Data preprocessing: convert to tensor and normalize
     transform = transforms.Compose([
         transforms.ToTensor(),
-        transforms.Normalize((0.1307,), (0.3081,))  # MNIST 的均值和标准差
+        transforms.Normalize((0.1307,), (0.3081,))  # MNIST mean and standard deviation
     ])
     
-    # 下载并加载训练集
+    # Download and load training set
     train_dataset = datasets.MNIST(
         root='./data',
         train=True,
@@ -29,7 +29,7 @@ def get_data_loaders(batch_size=64):
         transform=transform
     )
     
-    # 下载并加载测试集
+    # Download and load test set
     test_dataset = datasets.MNIST(
         root='./data',
         train=False,
@@ -37,7 +37,7 @@ def get_data_loaders(batch_size=64):
         transform=transform
     )
     
-    # 创建数据加载器
+    # Create data loaders
     train_loader = torch.utils.data.DataLoader(
         train_dataset,
         batch_size=batch_size,
@@ -55,35 +55,37 @@ def get_data_loaders(batch_size=64):
 
 def get_image_path(index, dataset):
     """
-    获取指定索引的图片路径信息
+    Get file path information for the specified image index
     
     Args:
-        index: 图片索引
-        dataset: 数据集对象
+        index: Image index
+        dataset: Dataset object
     
     Returns:
-        file_path: 文件路径
-        file_name: 文件名
+        file_path: File path
+        file_name: File name
+        images_path: Images file path
+        labels_path: Labels file path
     """
-    # MNIST 数据集存储在 data/MNIST/raw/ 目录下
+    # MNIST dataset is stored in data/MNIST/raw/ directory
     data_dir = './data/MNIST/raw'
     
-    # 根据是训练集还是测试集确定文件名前缀
+    # Determine file name prefix based on whether it's training or test set
     if dataset.train:
         prefix = 'train'
     else:
         prefix = 't10k'
     
-    # MNIST 原始文件命名格式
-    # 训练集: train-images-idx3-ubyte, train-labels-idx1-ubyte
-    # 测试集: t10k-images-idx3-ubyte, t10k-labels-idx1-ubyte
+    # MNIST raw file naming format
+    # Training set: train-images-idx3-ubyte, train-labels-idx1-ubyte
+    # Test set: t10k-images-idx3-ubyte, t10k-labels-idx1-ubyte
     images_file = f'{prefix}-images-idx3-ubyte'
     labels_file = f'{prefix}-labels-idx1-ubyte'
     
     images_path = os.path.join(data_dir, images_file)
     labels_path = os.path.join(data_dir, labels_file)
     
-    # 构建显示用的文件名
+    # Build display file name
     file_name = f'{prefix}_image_{index}.png'
     file_path = os.path.join(data_dir, file_name)
     
