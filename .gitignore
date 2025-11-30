@@ -9,3 +9,7 @@
 *.pyzwzw
 *.pyzwzwzw
 *.pyzwzwzwzw
+venv/
+.cursor/
+*.pth
+data/
